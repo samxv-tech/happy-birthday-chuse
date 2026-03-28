@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💖</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #fff9c4, #ffe082);
+    color: #333;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* 🐥 Floating chicks */
+.chick {
+    position: fixed;
+    font-size: 25px;
+    animation: floatUp linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
+
+.container {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+#text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+img {
+    width: 80%;
+    max-height: 250px;
+    object-fit: contain;
+    margin-top: 15px;
+}
+
+/* BUTTON */
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #ffb300;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 🎉 Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* 🔐 Secret popup */
+#secretBox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: #fff3cd;
+    color: #333;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    font-size: 1.5rem;
+    transition: 0.3s;
+    z-index: 999;
+}
+
+#secretBox.show {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+@media(max-width:600px){
+    #text {font-size: 1rem;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>💖 Just For You 💖</h1>
+
+    <img id="image" src="img1.png">
+
+    <div id="text"></div>
+
+    <!-- BUTTONS -->
+    <button onclick="startStory()">Start 💫</button>
+    <button id="nextBtn" onclick="nextPart()" style="display:none;">Next ⏭️</button>
+    <button id="secretBtn" onclick="showSecret()" style="display:none;">🔐 Unlock Secret 💛</button>
+</div>
+
+<!-- SECRET BOX -->
+<div id="secretBox">💛 loveee you pyaare 🐥</div>
+
+<script>
+let parts = [
+`Toh bataiye…<br>Kya ye teesra saal bhi…<br>Mera bhai banke bitana chahoge?`,
+`Mujhe daant ke sudharna chahoge?<br>Mujhe pyaar karna chahoge?<br>Mujhe chidana chahoge?`,
+`Mere saath masti–mazaak karna chahoge?<br>Fun wala bond… 😙`,
+`Baatein toh main aapse…<br>Roz karna chahta hoon… 🫶🏻`,
+`Lekin kya karu…<br>Kismat hi nahi hai… 🥲`,
+`Mujhe bhool toh nahi jaoge na…? 😭`,
+`Bahut din ho gaye… proper baat kiye hue…`,
+`Kabhi kabhi mann karta hai… bas baat karta rahu… 🫠`,
+`Aapke saath baat karna… bohot accha lagta hai 🤌🏻`,
+`Sab tension halki ho jaati hain… 💞`,
+`Aap naraz ho kya…? 😔`,
+`Main theek kar lunga… sach mein…`,
+`Mujhe aapki daant sunni hai…`,
+`Mahine ho gaye… 😭`,
+`January mein aaunga… aur bohot baatein karunga 💞`
+];
+
+let images = ["img1.png","img2.png","img3.png","img4.png","img5.png"];
+
+let i = 0;
+let typingSpeed = 30;
+let isTyping = false;
+
+/* START */
+function startStory() {
+    document.getElementById("nextBtn").style.display = "inline-block";
+    showPart();
+}
+
+/* SHOW PART */
+function showPart() {
+    if (i >= parts.length) {
+        startConfetti();
+        document.getElementById("nextBtn").innerText = "Done 💛";
+
+        // 🔐 Show secret button
+        document.getElementById("secretBtn").style.display = "inline-block";
+        return;
+    }
+
+    document.getElementById("image").src = images[i % images.length];
+    typeText(parts[i]);
+
+    i++;
+}
+
+/* ✨ Typing effect */
+function typeText(text) {
+    let element = document.getElementById("text");
+    element.innerHTML = "";
+    let index = 0;
+    isTyping = true;
+
+    function type() {
+        if (index < text.length) {
+            element.innerHTML += text.charAt(index);
+            index++;
+            setTimeout(type, typingSpeed);
+        } else {
+            isTyping = false;
+        }
+    }
+    type();
+}
+
+/* NEXT */
+function nextPart() {
+    if (isTyping) return;
+    showPart();
+}
+
+/* 🎉 Confetti */
+function startConfetti() {
+    for (let i = 0; i < 150; i++) {
+        let c = document.createElement("div");
+        c.classList.add("confetti");
+
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor =
+            "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+
+        c.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+        document.body.appendChild(c);
+
+        setTimeout(() => c.remove(), 5000);
+    }
+}
+
+/* 🐥 Chicks */
+function createChicks() {
+    for (let i = 0; i < 20; i++) {
+        let chick = document.createElement("div");
+        chick.classList.add("chick");
+        chick.innerHTML = "🐥";
+
+        chick.style.left = Math.random() * 100 + "vw";
+        chick.style.animationDuration = (Math.random() * 5 + 5) + "s";
+
+        document.body.appendChild(chick);
+    }
+}
+createChicks();
+
+/* 🔐 Secret */
+function showSecret() {
+    document.getElementById("secretBox").classList.add("show");
+}
+</script>
+
+</body>
+</html>
